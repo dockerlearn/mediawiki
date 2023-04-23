@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  dbname: wikidatabase
+kind: ConfigMap
+metadata:
+  labels:
+    service: {{ template "commonchart.fullname" . }}
+  name: {{ template "commonchart.fullname" . }}-cm

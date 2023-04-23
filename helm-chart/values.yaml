@@ -1,0 +1,5 @@
+nameOverride: ""
+global:
+  envtype: "dev"
+  envid: "01"
+  appName: "mediawiki"
