@@ -22,3 +22,22 @@ Helm chart includes mysql statefulset and mediawiki deployment creating a Standa
 ![Mediawiki Pods](/Images/pods.png "Pods")
 
 **Mediawiki Pods Running**
+
+## Automation Scope
+
+Though there is lot of scope left for automation one particular i want to mention is to map LocalSettings.php file into mediawiki kubernetes deployment yaml.
+
+A generic LocalSettings.php file can be created with mysql k8 fqdn and mounted as volume on its deployment as hostpath
+
+```
+volumeMounts:
+    - mountPath: /var/www/html/mediawiki/LocalSettings.php
+      name: myfile
+  volumes:
+  - name: myfile
+    hostPath:
+      path: /opt/local/LocalSettings.php
+      type: FileOrCreate
+```     
+
+Apart from this secrets can be passed through vault and a Jenkinsfile for jenkins job deployment
