@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: mysql-media
+spec:
+ selector:
+   matchLabels:
+     app: mysql-media
+ serviceName: mysql-media
+ replicas: 1
+ template:
+   metadata:
+     labels:
+       app: mysql-media
+   spec:
+     terminationGracePeriodSeconds: 10
+     containers:
+     - name: mysql-media
+       image: mysql:5.7.42
+       args:
+       - --ignore-db-dir=lost+found
+       ports:
+       - containerPort: 3306
+         name: mysql-media
+       env:
+       - name: MYSQL_ROOT_PASSWORD
+         valueFrom:
+           secretKeyRef:
+             name: mysql-secret
+             key: password
+       - name: MYSQL_DATABASE
+         valueFrom:
+           configMapKeyRef:
+             name: {{ template "commonchart.fullname" . }}-cm
+             key: dbname
+       volumeMounts:
+       - mountPath: /var/lib/mysql
+         name: todo-volume
+ volumeClaimTemplates:
+ - metadata:
+     name: todo-volume
+   spec:
+     storageClassName: managed
+     accessModes: [ "ReadWriteOnce" ]
+     resources:
+       requests:
+         storage: 1Gi

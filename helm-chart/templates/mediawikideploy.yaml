@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: {{ template "commonchart.fullname" . }}
+  name: {{ template "commonchart.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: mediawiki
+  template:
+    metadata:
+      labels:
+        service: mediawiki
+    spec:
+      containers:
+      - image: shrey03/mediawiki:1.39.3
+        imagePullPolicy: Always
+        name: mediawiki
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "0.5Gi"
+          requests:
+            cpu: "500m"
+            memory: "0.5Gi"
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
